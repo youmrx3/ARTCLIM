@@ -75,16 +75,13 @@ export function SummaryEditor({
     <div className="space-y-2">
       {summaryOrder.map((key, index) => {
         const value = getValue(key);
-        // Skip remise/timbre if not active (but still allow reordering in edit mode)
-        if ((key === 'remise' && remise <= 0) || (key === 'timbre' && timbre <= 0)) {
-          return null;
-        }
+        const isInactive = (key === 'remise' && remise <= 0) || (key === 'timbre' && timbre <= 0);
 
         const isTTC = key === 'ttc';
         const isEditing = editingKey === key;
 
         return (
-          <div key={key} className="group">
+          <div key={key} className={`group ${isInactive ? 'opacity-40' : ''}`}>
             {isTTC && <div className="h-px bg-border my-2" />}
             <div className={`flex items-center gap-1 ${isTTC ? 'font-bold text-lg' : 'text-sm'}`}>
               <div className="flex flex-col opacity-0 group-hover:opacity-100 transition-opacity">
@@ -130,7 +127,7 @@ export function SummaryEditor({
                   </span>
                 )}
                 <span className={isTTC ? 'text-primary' : ''}>
-                  {value}
+                  {isInactive ? '-' : value}
                 </span>
               </div>
             </div>
